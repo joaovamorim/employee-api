@@ -1,0 +1,12 @@
+.vscode
+.vs
+*.suo
+bin
+obj
+Bin
+Obj
+*.user
+.sonarqube
+TestResults
+nuget.config
+.github
