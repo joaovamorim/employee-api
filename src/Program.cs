@@ -52,9 +52,11 @@ app.MapPost("insertemployee", async (string nome, string data_nascimento, string
             await connection.OpenAsync();
 
             var query = @"insert into funcionario (nome, data_nascimento, cpf, municipio_nasc, chapa, status)
-                            values ('" + nome + "', TO_DATE('" + data_nascimento + "', 'DD/MM/YYYY'), '" + cpf + "', (select codigo from municipio where upper(nome) like '"+ municipio_nasc.ToUpper() +"'), '" + chapa + "', '" + status + "')";
+                            values ('" + nome + "', TO_DATE('" + data_nascimento + "', 'DD-MM-YYYY'), '" + cpf + "', (select codigo from municipio where upper(nome) like '" + municipio_nasc.ToUpper() + "'), '" + chapa + "', '" + status + "')";
 
-            listFuncionario = (List<FuncionarioInsert>)await connection.QueryAsync<FuncionarioInsert>(query);
+            var funcionarios = await connection.QueryAsync<FuncionarioInsert>(query);
+
+            listFuncionario = funcionarios.ToList();
 
             await connection.CloseAsync();
         }
@@ -64,7 +66,7 @@ app.MapPost("insertemployee", async (string nome, string data_nascimento, string
         throw;
     }
 
-    return Results.Ok("Funcionário cadastrado com sucesso!");
+    return Results.Ok(true);
 });
 
 app.Run();
